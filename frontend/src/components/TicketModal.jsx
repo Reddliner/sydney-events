@@ -6,6 +6,8 @@ export default function TicketModal({ event, onClose }) {
   const [consent, setConsent] = useState(false)
 
   const submit = async () => {
+    if (!email || !consent) return alert('Email + consent required')
+
     const res = await api.post(`/events/${event._id}/lead`, {
       email,
       consent
@@ -15,26 +17,44 @@ export default function TicketModal({ event, onClose }) {
   }
 
   return (
-    <div style={{ background: '#fff', padding: 20, border: '1px solid #000' }}>
-      <h3>Get Tickets</h3>
+    <div style={{
+      position: 'fixed',
+      inset: 0,
+      background: 'rgba(0,0,0,0.4)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div style={{
+        background: '#fff',
+        padding: 24,
+        borderRadius: 12,
+        width: 320
+      }}>
+        <h3>{event.title}</h3>
 
-      <input
-        placeholder="Email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-
-      <div>
         <input
-          type="checkbox"
-          checked={consent}
-          onChange={e => setConsent(e.target.checked)}
+          placeholder="Email address"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
         />
-        I agree to receive emails
-      </div>
 
-      <button onClick={submit}>Continue</button>
-      <button onClick={onClose}>Cancel</button>
+        <div style={{ marginTop: 8 }}>
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={e => setConsent(e.target.checked)}
+          />{' '}
+          I agree to receive updates
+        </div>
+
+        <div style={{ marginTop: 16, display: 'flex', gap: 8 }}>
+          <button onClick={submit}>Continue</button>
+          <button className="secondary" onClick={onClose}>
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

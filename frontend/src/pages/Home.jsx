@@ -1,8 +1,6 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { api } from '../services/api'
 import EventCard from '../components/EventCard'
-
 
 export default function Home() {
   const [events, setEvents] = useState([])
@@ -12,8 +10,8 @@ export default function Home() {
   }, [])
 
   return (
-    <div style={{ padding: 24 }}>
-      <h2>Sydney Events</h2>
+    <div style={{ maxWidth: 720, margin: '40px auto' }}>
+      <h2>Upcoming Events in Sydney</h2>
       {events.map(event => (
         <EventCard key={event._id} event={event} />
       ))}
