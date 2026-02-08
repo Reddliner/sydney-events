@@ -1,5 +1,7 @@
+import React from 'react'
 import { useState } from 'react'
 import TicketModal from './TicketModal'
+
 
 export default function EventCard({ event }) {
   const [open, setOpen] = useState(false)
