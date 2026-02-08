@@ -3,8 +3,13 @@ import passport from 'passport'
 
 const router = express.Router()
 
+// 👇 QUICK DIAGNOSTIC (TEMP)
 router.get(
   '/google',
+  (req, res, next) => {
+    console.log('/auth/google route hit')
+    next()
+  },
   passport.authenticate('google', {
     scope: ['profile', 'email']
   })
