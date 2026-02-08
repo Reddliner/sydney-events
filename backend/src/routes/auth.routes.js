@@ -1,5 +1,5 @@
 import express from 'express'
-import passport from '../auth/passport.js'
+import passport from 'passport'
 
 const router = express.Router()
 
@@ -12,17 +12,12 @@ router.get(
 
 router.get(
   '/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', {
+    failureRedirect: '/login'
+  }),
   (req, res) => {
-    res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`)
+    res.redirect(process.env.FRONTEND_URL + '/#/dashboard')
   }
 )
-
-router.get('/success', (req, res) => {
-  res.json({
-    loggedIn: true,
-    user: req.user
-  })
-})
 
 export default router
