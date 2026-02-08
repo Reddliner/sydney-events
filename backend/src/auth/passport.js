@@ -6,10 +6,10 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/auth/google/callback'
+      callbackURL: `${process.env.BASE_URL}/auth/google/callback`
     },
     (accessToken, refreshToken, profile, done) => {
-      return done(null, {
+      done(null, {
         id: profile.id,
         displayName: profile.displayName,
         email: profile.emails?.[0]?.value

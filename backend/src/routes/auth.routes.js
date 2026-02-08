@@ -1,9 +1,8 @@
 import express from 'express'
-import passport from 'passport'
+import passport from '../auth/passport.js'
 
 const router = express.Router()
 
-// 🚀 START GOOGLE LOGIN
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -11,12 +10,9 @@ router.get(
   })
 )
 
-// 🔁 GOOGLE CALLBACK
 router.get(
   '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/'
-  }),
+  passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     res.redirect('/auth/success')
   }
