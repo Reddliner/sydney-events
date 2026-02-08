@@ -6,6 +6,14 @@ import Navbar from './components/Navbar'
 
 export default function App() {
   return (
+    <div style={{ padding: 40 }}>
+      <h1>React is rendering ✅</h1>
+    </div>
+  )
+}
+
+export default function App() {
+  return (
     <BrowserRouter>
       <Navbar />
       <Routes>
