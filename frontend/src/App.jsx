@@ -1,4 +1,3 @@
-import React from 'react'
 import { HashRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -7,21 +6,13 @@ import Navbar from './components/Navbar'
 
 export default function App() {
   return (
-    <div style={{ padding: 40 }}>
-      <h1>React is rendering ✅</h1>
-    </div>
-  )
-}
-
-export default function App() {
-  return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
