@@ -3,7 +3,7 @@ import passport from 'passport'
 
 const router = express.Router()
 
-// Start Google login
+// 🚀 START GOOGLE LOGIN
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -11,30 +11,21 @@ router.get(
   })
 )
 
-// Google callback
+// 🔁 GOOGLE CALLBACK
 router.get(
   '/google/callback',
   passport.authenticate('google', {
     failureRedirect: '/'
   }),
   (req, res) => {
-    // Successful login
     res.redirect('/auth/success')
   }
 )
 
-// Simple success endpoint
 router.get('/success', (req, res) => {
   res.json({
     loggedIn: true,
     user: req.user
-  })
-})
-
-// Logout
-router.post('/logout', (req, res) => {
-  req.logout(() => {
-    res.json({ success: true })
   })
 })
 
