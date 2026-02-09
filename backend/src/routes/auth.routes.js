@@ -3,26 +3,31 @@ import passport from 'passport'
 
 const router = express.Router()
 
-// 👇 QUICK DIAGNOSTIC (TEMP)
+// Start Google OAuth
 router.get(
   '/google',
-  (req, res, next) => {
-    console.log('/auth/google route hit')
-    next()
-  },
   passport.authenticate('google', {
-    scope: ['profile', 'email']
+    scope: ['profile', 'email'],
+    prompt: 'select_account'
   })
 )
 
+// Google OAuth callback
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    failureRedirect: '/login'
+    failureRedirect: '/auth/failure',
+    session: true
   }),
   (req, res) => {
-    res.redirect(process.env.FRONTEND_URL + '/#/dashboard')
+    // Successful login → redirect to admin dashboard
+    res.redirect(`${process.env.FRONTEND_URL}/#/dashboard`)
   }
 )
+
+// Optional failure route (helps debugging)
+router.get('/failure', (req, res) => {
+  res.status(401).json({ message: 'Google authentication failed' })
+})
 
 export default router
