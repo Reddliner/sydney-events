@@ -2,8 +2,14 @@ import React from 'react'
 
 export default function Login() {
   const login = () => {
-    window.location.href =
-      import.meta.env.VITE_API_URL + '/auth/google'
+    const backendUrl = import.meta.env.VITE_BACKEND_URL
+
+    if (!backendUrl) {
+      alert('Backend URL is not configured')
+      return
+    }
+
+    window.location.href = `${backendUrl}/auth/google`
   }
 
   return (
