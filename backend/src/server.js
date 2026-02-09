@@ -1,4 +1,4 @@
-import './bootstrap.js' 
+import './bootstrap.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -6,18 +6,29 @@ import app from './app.js'
 import { connectDB } from './config/db.js'
 import { startScrapeJob } from './jobs/scrape.job.js'
 
-
 const PORT = process.env.PORT || 5000
 
 const startServer = async () => {
-  await connectDB()
+  try {
+    await connectDB()
+    console.log('✅ MongoDB connected')
 
-  // 🚀 Start scraper cron
-  startScrapeJob()
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`)
 
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`)
-  })
+      // Start scraper AFTER server is ready (non-blocking)
+      setImmediate(() => {
+        try {
+          startScrapeJob()
+        } catch (err) {
+          console.error('❌ Scrape job failed to start', err.message)
+        }
+      })
+    })
+  } catch (err) {
+    console.error('❌ Server startup failed', err)
+    process.exit(1)
+  }
 }
 
 startServer()

@@ -1,7 +1,10 @@
 import express from 'express'
 import cors from 'cors'
 import session from 'express-session'
-import passport from './auth/passport.js'
+import passport from 'passport'
+
+// IMPORTANT: this file registers GoogleStrategy
+import './config/passport.js'
 
 import eventsRoutes from './routes/events.routes.js'
 import authRoutes from './routes/auth.routes.js'
@@ -9,29 +12,45 @@ import dashboardRoutes from './routes/dashboard.routes.js'
 
 const app = express()
 
+/**
+ * CORS — must be explicit for OAuth + cookies
+ */
 app.use(
   cors({
-    origin: true,
+    origin: process.env.FRONTEND_URL,
     credentials: true
   })
 )
 
 app.use(express.json())
 
+/**
+ * Session — Railway-safe config
+ */
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'supersecret',
+    name: 'sydney-events.sid',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
-      secure: false // Railway uses HTTPS but Node sees HTTP
+      httpOnly: true,
+      secure: true,        // required for Railway
+      sameSite: 'none'     // required for cross-site OAuth
     }
   })
 )
 
+/**
+ * Passport — order matters
+ */
 app.use(passport.initialize())
 app.use(passport.session())
 
+/**
+ * Health check
+ */
 app.get('/', (req, res) => {
   res.json({
     status: 'ok',
@@ -39,12 +58,11 @@ app.get('/', (req, res) => {
   })
 })
 
-// Public
+/**
+ * Routes
+ */
 app.use('/events', eventsRoutes)
-
-app.use('/dashboard', dashboardRoutes)
-
-// Auth
 app.use('/auth', authRoutes)
+app.use('/dashboard', dashboardRoutes)
 
 export default app
